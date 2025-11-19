@@ -12,18 +12,22 @@ export const metadata: Metadata = {
   description: "A beautiful collection of penguin dolls",
 };
 
-export default function RootLayout({
+import { WalkingPenguinsOverlay } from "@/components/ui/WalkingPenguins";
+import { getPenguins } from "@/lib/data";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const penguins = await getPenguins();
+
   return (
     <html lang="en">
-      <body className={cn(inter.className, "min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950")}>
+      <body className={`${inter.className} min-h-screen pb-16`}>
         <Navbar />
-        <main className="flex-grow pt-16">
-          {children}
-        </main>
+        {children}
+        <WalkingPenguinsOverlay penguins={penguins} />
         <Footer />
       </body>
     </html>
