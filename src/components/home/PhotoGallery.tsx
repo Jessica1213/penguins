@@ -13,21 +13,19 @@ export function PhotoGallery({ penguins }: PhotoGalleryProps) {
     const allImages = penguins.flatMap((p) => p.images);
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    useEffect(() => {
+    const changeImage = () => {
         if (allImages.length <= 1) return;
+        let nextIndex;
+        do {
+            nextIndex = Math.floor(Math.random() * allImages.length);
+        } while (nextIndex === currentIndex && allImages.length > 1);
+        setCurrentIndex(nextIndex);
+    };
 
-        const interval = setInterval(() => {
-            // Randomly select next image, but try to avoid the same one
-            let nextIndex;
-            do {
-                nextIndex = Math.floor(Math.random() * allImages.length);
-            } while (nextIndex === currentIndex && allImages.length > 1);
-
-            setCurrentIndex(nextIndex);
-        }, 4000); // Change every 4 seconds
-
+    useEffect(() => {
+        const interval = setInterval(changeImage, 4000); // Change every 4 seconds
         return () => clearInterval(interval);
-    }, [allImages.length, currentIndex]);
+    }, [currentIndex, allImages.length]); // Re-create interval when index changes to reset timer
 
     if (allImages.length === 0) return null;
 
@@ -38,7 +36,10 @@ export function PhotoGallery({ penguins }: PhotoGalleryProps) {
                     Snapshot Gallery
                 </h2>
 
-                <div className="relative w-full max-w-4xl mx-auto aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl bg-slate-100 dark:bg-slate-900">
+                <div
+                    className="relative w-full max-w-4xl mx-auto aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl bg-slate-100 dark:bg-slate-900 cursor-pointer group"
+                    onClick={changeImage}
+                >
                     <AnimatePresence mode="wait">
                         <motion.img
                             key={currentIndex}
@@ -52,7 +53,12 @@ export function PhotoGallery({ penguins }: PhotoGalleryProps) {
                         />
                     </AnimatePresence>
 
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent text-white text-center">
+                    {/* Hover Hint */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/10">
+                        <span className="bg-black/50 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm">Click to shuffle</span>
+                    </div>
+
+                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent text-white text-center pointer-events-none">
                         <p className="text-sm font-medium opacity-80">Random Cuteness</p>
                     </div>
                 </div>

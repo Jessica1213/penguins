@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Plus, Edit, Trash2, Search } from "lucide-react";
+import { Plus, Edit, Trash2, Search, LogOut } from "lucide-react";
 import { Penguin } from "@/types/penguin";
 import { getPenguins } from "@/lib/data";
 
@@ -43,13 +43,25 @@ export default function AdminDashboard() {
                         <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
                         <p className="text-slate-500 dark:text-slate-400">Manage your penguin collection</p>
                     </div>
-                    <Link
-                        href="/admin/new"
-                        className="inline-flex items-center px-6 py-3 bg-ocean-600 hover:bg-ocean-700 text-white font-medium rounded-xl shadow-lg transition-colors"
-                    >
-                        <Plus className="w-5 h-5 mr-2" />
-                        Add New Penguin
-                    </Link>
+                    <div className="flex items-center gap-4">
+                        <Link
+                            href="/admin/new"
+                            className="inline-flex items-center px-6 py-3 bg-ocean-600 hover:bg-ocean-700 text-white font-medium rounded-xl shadow-lg transition-colors"
+                        >
+                            <Plus className="w-5 h-5 mr-2" />
+                            Add New Penguin
+                        </Link>
+                        <button
+                            onClick={() => {
+                                localStorage.removeItem("isAdmin");
+                                router.push("/penguins");
+                            }}
+                            className="p-3 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-colors"
+                            title="Logout"
+                        >
+                            <LogOut className="w-5 h-5" />
+                        </button>
+                    </div>
                 </div>
 
                 {/* Search */}

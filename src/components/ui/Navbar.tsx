@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Anchor } from "lucide-react";
+import { Menu, X, Anchor, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -30,15 +30,26 @@ export function Navbar() {
 
                     {/* Desktop Menu */}
                     <div className="hidden md:block">
-                        <div className="ml-10 flex items-baseline space-x-4">
+                        <div className="ml-10 flex items-center space-x-4">
                             {navItems.map((item) => (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    className="text-slate-600 hover:text-ocean-600 dark:text-slate-300 dark:hover:text-ocean-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                                >
-                                    {item.name}
-                                </Link>
+                                item.name === "Admin" ? (
+                                    <Link
+                                        key={item.name}
+                                        href={item.href}
+                                        className="text-slate-400 hover:text-ocean-600 dark:text-slate-500 dark:hover:text-ocean-400 p-2 rounded-full transition-colors"
+                                        title="Admin Area"
+                                    >
+                                        <Settings className="w-5 h-5" />
+                                    </Link>
+                                ) : (
+                                    <Link
+                                        key={item.name}
+                                        href={item.href}
+                                        className="text-slate-600 hover:text-ocean-600 dark:text-slate-300 dark:hover:text-ocean-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                                    >
+                                        {item.name}
+                                    </Link>
+                                )
                             ))}
                         </div>
                     </div>
