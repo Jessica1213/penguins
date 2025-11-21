@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Anchor, Settings, Fish, Bird } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSettings } from "@/context/SettingsContext";
+import { ModeToggle } from "@/components/theme/mode-toggle";
 
 const navItems = [
     { name: "Home", href: "/" },
@@ -55,6 +56,8 @@ export function Navbar() {
                                 )
                             ))}
 
+
+
                             {/* Feeding Toggle */}
                             <button
                                 onClick={toggleFeeding}
@@ -68,6 +71,11 @@ export function Navbar() {
                             >
                                 <Fish className="w-5 h-5" />
                             </button>
+
+                            {/* Theme Toggle */}
+                            <div className="relative w-9 h-9 flex items-center justify-center">
+                                <ModeToggle />
+                            </div>
                         </div>
                     </div>
 

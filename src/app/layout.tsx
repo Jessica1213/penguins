@@ -17,24 +17,33 @@ import { getPenguins } from "@/lib/data";
 
 import { SettingsProvider } from "@/context/SettingsContext";
 
+import { ThemeProvider } from "@/components/theme/theme-provider";
+
 export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   const penguins = await getPenguins();
 
   return (
-    <html lang="en">
-      <body className={`${inter.className} min-h-screen pb-16`}>
-        <SettingsProvider>
-          <Navbar />
-          <main className="pt-16">
-            {children}
-          </main>
-          <WalkingPenguinsOverlay penguins={penguins} />
-          <Footer />
-        </SettingsProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SettingsProvider>
+            <Navbar />
+            <main className="min-h-screen pt-16 pb-20">
+              {children}
+            </main>
+            <WalkingPenguinsOverlay penguins={penguins} />
+            <Footer />
+          </SettingsProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
