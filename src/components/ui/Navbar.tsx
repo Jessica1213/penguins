@@ -111,6 +111,29 @@ export function Navbar() {
                                     {item.name}
                                 </Link>
                             ))}
+
+                            <div className="pt-4 pb-2 border-t border-slate-200 dark:border-slate-800 mt-2 space-y-2">
+                                <div className="flex items-center justify-between px-3 py-2 rounded-md hover:bg-slate-50 dark:hover:bg-slate-900">
+                                    <span className="text-base font-medium text-slate-600 dark:text-slate-300">Feeding Feature</span>
+                                    <button
+                                        onClick={toggleFeeding}
+                                        className={cn(
+                                            "p-2 rounded-full transition-colors",
+                                            isFeedingEnabled
+                                                ? "text-ocean-600 bg-ocean-50 dark:text-ocean-400 dark:bg-ocean-900/20"
+                                                : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+                                        )}
+                                    >
+                                        <Fish className="w-5 h-5" />
+                                    </button>
+                                </div>
+                                <div className="flex items-center justify-between px-3 py-2 rounded-md hover:bg-slate-50 dark:hover:bg-slate-900">
+                                    <span className="text-base font-medium text-slate-600 dark:text-slate-300">Theme</span>
+                                    <div className="relative w-9 h-9 flex items-center justify-center">
+                                        <ModeToggle />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </motion.div>
                 )}

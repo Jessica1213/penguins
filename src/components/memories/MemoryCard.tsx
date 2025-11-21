@@ -6,15 +6,17 @@ import { motion } from "framer-motion";
 
 interface MemoryCardProps {
     memory: Memory;
+    onClick?: () => void;
 }
 
-export function MemoryCard({ memory }: MemoryCardProps) {
+export function MemoryCard({ memory, onClick }: MemoryCardProps) {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800"
+            onClick={onClick}
+            className={`bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800 ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
         >
             {/* Image Header */}
             <div className="relative aspect-square sm:aspect-video w-full overflow-hidden">

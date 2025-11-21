@@ -132,3 +132,31 @@ export async function getMemory(id: string): Promise<Memory | undefined> {
     await new Promise((resolve) => setTimeout(resolve, 500));
     return MOCK_MEMORIES.find((m) => m.id === id);
 }
+
+export async function addMemory(memory: Omit<Memory, "id">): Promise<Memory> {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    const newMemory = {
+        ...memory,
+        id: Math.random().toString(36).substr(2, 9),
+    };
+    MOCK_MEMORIES.push(newMemory);
+    return newMemory;
+}
+
+export async function updateMemory(id: string, memory: Partial<Memory>): Promise<Memory | undefined> {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    const index = MOCK_MEMORIES.findIndex((m) => m.id === id);
+    if (index !== -1) {
+        MOCK_MEMORIES[index] = { ...MOCK_MEMORIES[index], ...memory };
+        return MOCK_MEMORIES[index];
+    }
+    return undefined;
+}
+
+export async function deleteMemory(id: string): Promise<void> {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    const index = MOCK_MEMORIES.findIndex((m) => m.id === id);
+    if (index !== -1) {
+        MOCK_MEMORIES.splice(index, 1);
+    }
+}

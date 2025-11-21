@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Upload, MapPin, Calendar, Tag } from "lucide-react";
+import { Upload, MapPin, Calendar, Tag, Search } from "lucide-react";
 import { getPenguins } from "@/lib/data";
 import { Penguin } from "@/types/penguin";
 import { Memory } from "@/types/memory";
@@ -15,6 +15,7 @@ interface MemoryFormProps {
 
 export function MemoryForm({ initialData, onSubmit, isSubmitting }: MemoryFormProps) {
     const [penguins, setPenguins] = useState<Penguin[]>([]);
+    const [penguinSearch, setPenguinSearch] = useState("");
     const [imagePreview, setImagePreview] = useState<string | null>(initialData?.imageUrl || null);
     const [formData, setFormData] = useState({
         title: initialData?.title || "",
@@ -27,6 +28,11 @@ export function MemoryForm({ initialData, onSubmit, isSubmitting }: MemoryFormPr
     useEffect(() => {
         getPenguins().then(setPenguins);
     }, []);
+
+    const filteredPenguins = penguins.filter(p =>
+        p.name.toLowerCase().includes(penguinSearch.toLowerCase()) ||
+        (p.nickname && p.nickname.toLowerCase().includes(penguinSearch.toLowerCase()))
+    );
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -155,22 +161,50 @@ export function MemoryForm({ initialData, onSubmit, isSubmitting }: MemoryFormPr
                         <span>Tag Penguins</span>
                     </div>
                 </label>
-                <div className="flex flex-wrap gap-2">
-                    {penguins.map((penguin) => (
-                        <label
-                            key={penguin.id}
-                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors has-[:checked]:bg-ocean-50 has-[:checked]:border-ocean-200 has-[:checked]:text-ocean-700 dark:has-[:checked]:bg-ocean-900/20 dark:has-[:checked]:border-ocean-800 dark:has-[:checked]:text-ocean-400"
-                        >
-                            <input
-                                type="checkbox"
-                                className="hidden"
-                                checked={formData.penguinIds.includes(penguin.id)}
-                                onChange={() => togglePenguin(penguin.id)}
-                            />
-                            <span className="text-sm">{penguin.nickname || penguin.name}</span>
-                        </label>
-                    ))}
+
+                {/* Search Penguins */}
+                <div className="relative mb-3">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                        type="text"
+                        placeholder="Search penguins..."
+                        value={penguinSearch}
+                        onChange={(e) => setPenguinSearch(e.target.value)}
+                        className="w-full pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-ocean-500"
+                    />
                 </div>
+
+                <div className="max-h-48 overflow-y-auto p-1 space-y-1 custom-scrollbar">
+                    <div className="flex flex-wrap gap-2">
+                        {filteredPenguins.map((penguin) => (
+                            <label
+                                key={penguin.id}
+                                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors has-[:checked]:bg-ocean-50 has-[:checked]:border-ocean-200 has-[:checked]:text-ocean-700 dark:has-[:checked]:bg-ocean-900/20 dark:has-[:checked]:border-ocean-800 dark:has-[:checked]:text-ocean-400"
+                            >
+                                <input
+                                    type="checkbox"
+                                    className="hidden"
+                                    checked={formData.penguinIds.includes(penguin.id)}
+                                    onChange={() => togglePenguin(penguin.id)}
+                                />
+                                <img
+                                    src={penguin.images[0]}
+                                    alt={penguin.name}
+                                    className="w-5 h-5 rounded-full object-cover"
+                                />
+                                <span className="text-sm">{penguin.nickname || penguin.name}</span>
+                            </label>
+                        ))}
+                        {filteredPenguins.length === 0 && (
+                            <p className="text-sm text-slate-500 dark:text-slate-400 italic w-full text-center py-2">
+                                No penguins found.
+                            </p>
+                        )}
+                    </div>
+                </div>
+                <p className="text-xs text-slate-500 mt-2">
+                    Selected: {formData.penguinIds.length} penguins
+                </p>
             </div>
 
             {/* Actions */}

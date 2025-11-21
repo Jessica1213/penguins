@@ -24,8 +24,8 @@ export function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-lg">
-                        Welcome to <span className="text-ocean-300">Jessica's Penguins</span>
+                    <h1 className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white mb-4 drop-shadow-sm">
+                        Welcome to <span className="text-ocean-600 dark:text-ocean-400">Jessica's Penguins</span>
                     </h1>
                     <p className="text-xl md:text-2xl text-slate-200 mb-10 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md">
                         Meet my adorable family of penguin dolls!

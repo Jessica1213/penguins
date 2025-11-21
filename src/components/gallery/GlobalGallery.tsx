@@ -15,6 +15,7 @@ interface GalleryItem {
     description?: string;
     date?: string;
     tags?: string[];
+    penguinIds?: string[];
 }
 
 interface GlobalGalleryProps {
@@ -45,8 +46,12 @@ export function GlobalGallery({ penguins, memories }: GlobalGalleryProps) {
             description: m.description,
             date: m.date,
             tags: ["Memory"],
+            penguinIds: m.penguinIds,
         }))
     ].sort(() => Math.random() - 0.5);
+
+    // Helper to get penguin details
+    const getPenguinDetails = (id: string) => penguins.find(p => p.id === id);
 
     return (
         <section className="py-16 bg-white dark:bg-slate-950">
@@ -115,14 +120,42 @@ export function GlobalGallery({ penguins, memories }: GlobalGalleryProps) {
                                     </button>
                                 </div>
 
-                                <div className="space-y-4">
+                                <div className="space-y-6">
                                     {selectedItem.description && (
                                         <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
                                             {selectedItem.description}
                                         </p>
                                     )}
 
-                                    <div className="flex flex-wrap gap-2 pt-4">
+                                    {/* Tagged Penguins */}
+                                    {selectedItem.penguinIds && selectedItem.penguinIds.length > 0 && (
+                                        <div>
+                                            <h4 className="text-sm font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+                                                <Tag className="w-4 h-4" />
+                                                In this memory
+                                            </h4>
+                                            <div className="flex flex-wrap gap-3">
+                                                {selectedItem.penguinIds.map(id => {
+                                                    const penguin = getPenguinDetails(id);
+                                                    if (!penguin) return null;
+                                                    return (
+                                                        <div key={id} className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 pr-3 rounded-full border border-slate-100 dark:border-slate-700">
+                                                            <img
+                                                                src={penguin.images[0]}
+                                                                alt={penguin.name}
+                                                                className="w-8 h-8 rounded-full object-cover"
+                                                            />
+                                                            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                                                {penguin.nickname || penguin.name}
+                                                            </span>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
                                         {selectedItem.date && (
                                             <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-full">
                                                 <Calendar className="w-3 h-3" />

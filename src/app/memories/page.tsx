@@ -1,4 +1,4 @@
-import { getMemories } from "@/lib/data";
+import { getMemories, getPenguins } from "@/lib/data";
 import { MemoriesContent } from "../../components/memories/MemoriesContent";
 
 export const metadata = {
@@ -8,6 +8,7 @@ export const metadata = {
 
 export default async function MemoriesPage() {
     const memories = await getMemories();
+    const penguins = await getPenguins();
 
     return (
         <div className="relative min-h-screen">
@@ -33,7 +34,7 @@ export default async function MemoriesPage() {
                     </p>
                 </div>
 
-                <MemoriesContent memories={memories} />
+                <MemoriesContent memories={memories} penguins={penguins} />
             </div>
         </div>
     );

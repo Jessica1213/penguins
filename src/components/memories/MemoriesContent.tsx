@@ -1,15 +1,20 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Memory } from "@/types/memory";
+import { Penguin } from "@/types/penguin";
 import { MemoryCard } from "./MemoryCard";
 import { YearNavigation } from "./YearNavigation";
+import { MemoryModal } from "./MemoryModal";
 
 interface MemoriesContentProps {
     memories: Memory[];
+    penguins: Penguin[];
 }
 
-export function MemoriesContent({ memories }: MemoriesContentProps) {
+export function MemoriesContent({ memories, penguins }: MemoriesContentProps) {
+    const [selectedMemory, setSelectedMemory] = useState<Memory | null>(null);
+
     // Group memories by year
     const memoriesByYear = useMemo(() => {
         const groups: Record<number, Memory[]> = {};
@@ -49,7 +54,10 @@ export function MemoriesContent({ memories }: MemoriesContentProps) {
                         <div className="columns-1 sm:columns-2 gap-8 space-y-8">
                             {memoriesByYear[year].map((memory) => (
                                 <div key={memory.id} className="break-inside-avoid">
-                                    <MemoryCard memory={memory} />
+                                    <MemoryCard
+                                        memory={memory}
+                                        onClick={() => setSelectedMemory(memory)}
+                                    />
                                 </div>
                             ))}
                         </div>
@@ -62,6 +70,12 @@ export function MemoriesContent({ memories }: MemoriesContentProps) {
                     </div>
                 )}
             </div>
+
+            <MemoryModal
+                memory={selectedMemory}
+                penguins={penguins}
+                onClose={() => setSelectedMemory(null)}
+            />
         </div>
     );
 }

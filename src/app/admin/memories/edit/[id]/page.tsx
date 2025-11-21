@@ -1,36 +1,35 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { MemoryForm } from "@/components/admin/MemoryForm";
 import { Memory } from "@/types/memory";
-import { getMemory } from "@/lib/data";
+import { getMemory, updateMemory } from "@/lib/data";
 
-export default function EditAdminMemoryPage({ params }: { params: { id: string } }) {
+export default function EditAdminMemoryPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = use(params);
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [memory, setMemory] = useState<Memory | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        getMemory(params.id).then((data) => {
+        getMemory(id).then((data) => {
             if (data) {
                 setMemory(data);
             } else {
-                router.push("/admin/memories");
+                router.push("/admin?tab=memories");
             }
             setIsLoading(false);
         });
-    }, [params.id, router]);
+    }, [id, router]);
 
     const handleSubmit = async (data: Omit<Memory, "id">) => {
         setIsSubmitting(true);
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log("Updating memory:", { id: params.id, ...data });
-        router.push("/admin/memories");
+        await updateMemory(id, data);
+        router.push("/admin?tab=memories");
         setIsSubmitting(false);
     };
 
@@ -48,11 +47,11 @@ export default function EditAdminMemoryPage({ params }: { params: { id: string }
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12">
             <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
                 <Link
-                    href="/admin/memories"
+                    href="/admin?tab=memories"
                     className="inline-flex items-center text-slate-500 hover:text-ocean-600 transition-colors mb-6"
                 >
                     <ArrowLeft className="w-4 h-4 mr-1" />
-                    Back to Memories
+                    Back to Dashboard
                 </Link>
 
                 <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
