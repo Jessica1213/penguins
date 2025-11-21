@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Upload, MapPin, Calendar, Tag, Search } from "lucide-react";
-import { getPenguins } from "@/lib/data";
+import { Upload, MapPin, Calendar, Tag, Search, Loader2 } from "lucide-react";
+import { upload } from "@vercel/blob/client";
 import { Penguin } from "@/types/penguin";
 import { Memory } from "@/types/memory";
 
@@ -11,10 +11,10 @@ interface MemoryFormProps {
     initialData?: Memory;
     onSubmit: (data: Omit<Memory, "id">) => Promise<void>;
     isSubmitting: boolean;
+    penguins: Penguin[];
 }
 
-export function MemoryForm({ initialData, onSubmit, isSubmitting }: MemoryFormProps) {
-    const [penguins, setPenguins] = useState<Penguin[]>([]);
+export function MemoryForm({ initialData, onSubmit, isSubmitting, penguins }: MemoryFormProps) {
     const [penguinSearch, setPenguinSearch] = useState("");
     const [imagePreview, setImagePreview] = useState<string | null>(initialData?.imageUrl || null);
     const [formData, setFormData] = useState({
@@ -25,21 +25,33 @@ export function MemoryForm({ initialData, onSubmit, isSubmitting }: MemoryFormPr
         penguinIds: initialData?.penguinIds || [],
     });
 
-    useEffect(() => {
-        getPenguins().then(setPenguins);
-    }, []);
+
 
     const filteredPenguins = penguins.filter(p =>
         p.name.toLowerCase().includes(penguinSearch.toLowerCase()) ||
         (p.nickname && p.nickname.toLowerCase().includes(penguinSearch.toLowerCase()))
     );
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            const imageUrl = URL.createObjectURL(file);
-            setImagePreview(imageUrl);
-            // In a real app, we would upload the file here and get the URL
+    const [isUploading, setIsUploading] = useState(false);
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files || e.target.files.length === 0) return;
+
+        const file = e.target.files[0];
+        setIsUploading(true);
+
+        try {
+            const newBlob = await upload(file.name, file, {
+                access: 'public',
+                handleUploadUrl: '/api/upload',
+            });
+
+            setImagePreview(newBlob.url);
+        } catch (error) {
+            console.error("Upload failed:", error);
+            alert("Failed to upload image. Please try again.");
+        } finally {
+            setIsUploading(false);
         }
     };
 
@@ -74,8 +86,12 @@ export function MemoryForm({ initialData, onSubmit, isSubmitting }: MemoryFormPr
                         <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                     ) : (
                         <div className="flex flex-col items-center justify-center h-full">
-                            <Upload className="w-8 h-8 text-slate-400 mb-2" />
-                            <span className="text-sm text-slate-500">Click to upload photo</span>
+                            {isUploading ? (
+                                <Loader2 className="w-8 h-8 text-slate-400 mb-2 animate-spin" />
+                            ) : (
+                                <Upload className="w-8 h-8 text-slate-400 mb-2" />
+                            )}
+                            <span className="text-sm text-slate-500">{isUploading ? 'Uploading...' : 'Click to upload photo'}</span>
                         </div>
                     )}
                     <input
@@ -84,6 +100,7 @@ export function MemoryForm({ initialData, onSubmit, isSubmitting }: MemoryFormPr
                         className="absolute inset-0 opacity-0 cursor-pointer"
                         onChange={handleImageUpload}
                         required={!imagePreview}
+                        disabled={isUploading}
                     />
                 </div>
             </div>

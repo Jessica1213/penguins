@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Upload, X } from "lucide-react";
+import { ArrowLeft, Upload, X, Loader2 } from "lucide-react";
+import { upload } from "@vercel/blob/client";
 import Link from "next/link";
 import { Penguin } from "@/types/penguin";
+import { createPenguinAction, updatePenguinAction } from "@/app/actions";
 
 interface PenguinFormProps {
     initialData?: Penguin;
@@ -38,12 +40,24 @@ export function PenguinForm({ initialData }: PenguinFormProps) {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // Mock image upload
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            const imageUrl = URL.createObjectURL(file);
-            setImages((prev) => [...prev, imageUrl]);
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files || e.target.files.length === 0) return;
+
+        const file = e.target.files[0];
+        setIsSubmitting(true); // Reuse submitting state or add a specific one for upload
+
+        try {
+            const newBlob = await upload(file.name, file, {
+                access: 'public',
+                handleUploadUrl: '/api/upload',
+            });
+
+            setImages((prev) => [...prev, newBlob.url]);
+        } catch (error) {
+            console.error("Upload failed:", error);
+            alert("Failed to upload image. Please try again.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -55,14 +69,29 @@ export function PenguinForm({ initialData }: PenguinFormProps) {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        try {
+            // Ensure numeric values are numbers
+            const submissionData = {
+                ...formData,
+                weight: formData.weight ? Number(formData.weight) : undefined,
+                height: formData.height ? Number(formData.height) : undefined,
+                images,
+            } as Omit<Penguin, "id" | "createdAt">;
 
-        console.log("Submitting:", { ...formData, images });
+            if (initialData) {
+                await updatePenguinAction(initialData.id, submissionData);
+            } else {
+                await createPenguinAction(submissionData);
+            }
 
-        // Redirect back to dashboard
-        router.push("/admin");
-        setIsSubmitting(false);
+            // Redirect manually after success
+            router.push("/admin");
+            router.refresh(); // Ensure the new data is fetched
+        } catch (error) {
+            console.error("Failed to save penguin:", error);
+            alert("Failed to save penguin. Please try again.");
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -200,10 +229,14 @@ export function PenguinForm({ initialData }: PenguinFormProps) {
                             </button>
                         </div>
                     ))}
-                    <label className="flex flex-col items-center justify-center aspect-square rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-ocean-500 dark:hover:border-ocean-500 cursor-pointer transition-colors bg-slate-50 dark:bg-slate-800/50">
-                        <Upload className="w-8 h-8 text-slate-400 mb-2" />
-                        <span className="text-sm text-slate-500">Add Photo</span>
-                        <input type="file" accept="image/png, image/jpeg, image/jpg, image/webp, image/heic, image/*" className="hidden" onChange={handleImageUpload} />
+                    <label className={`flex flex-col items-center justify-center aspect-square rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-ocean-500 dark:hover:border-ocean-500 cursor-pointer transition-colors bg-slate-50 dark:bg-slate-800/50 ${isSubmitting ? 'opacity-50 pointer-events-none' : ''}`}>
+                        {isSubmitting ? (
+                            <Loader2 className="w-8 h-8 text-slate-400 mb-2 animate-spin" />
+                        ) : (
+                            <Upload className="w-8 h-8 text-slate-400 mb-2" />
+                        )}
+                        <span className="text-sm text-slate-500">{isSubmitting ? 'Uploading...' : 'Add Photo'}</span>
+                        <input type="file" accept="image/png, image/jpeg, image/jpg, image/webp, image/heic, image/*" className="hidden" onChange={handleImageUpload} disabled={isSubmitting} />
                     </label>
                 </div>
                 <p className="text-sm text-slate-500">Upload photos from 4 directions for the best experience.</p>
