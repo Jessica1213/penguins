@@ -1,14 +1,10 @@
-import { MemoryFeed } from "@/components/memories/MemoryFeed";
 import { getMemories } from "@/lib/data";
-import { Plus } from "lucide-react";
-import Link from "next/link";
+import { MemoriesContent } from "../../components/memories/MemoriesContent";
 
 export const metadata = {
-    title: "Travel Memories | Penguin Database",
+    title: "Travel Memories | Jessica's Penguins",
     description: "A collection of travel memories from our penguin friends.",
 };
-
-import { MemoriesContent } from "@/components/memories/MemoriesContent";
 
 export default async function MemoriesPage() {
     const memories = await getMemories();
