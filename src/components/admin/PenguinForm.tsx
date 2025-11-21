@@ -203,7 +203,7 @@ export function PenguinForm({ initialData }: PenguinFormProps) {
                     <label className="flex flex-col items-center justify-center aspect-square rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-ocean-500 dark:hover:border-ocean-500 cursor-pointer transition-colors bg-slate-50 dark:bg-slate-800/50">
                         <Upload className="w-8 h-8 text-slate-400 mb-2" />
                         <span className="text-sm text-slate-500">Add Photo</span>
-                        <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                        <input type="file" accept="image/png, image/jpeg, image/jpg, image/webp, image/heic, image/*" className="hidden" onChange={handleImageUpload} />
                     </label>
                 </div>
                 <p className="text-sm text-slate-500">Upload photos from 4 directions for the best experience.</p>

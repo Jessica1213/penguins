@@ -94,9 +94,24 @@ export function WalkingPenguinsOverlay({ penguins }: WalkingPenguinsProps) {
     // Global Click Listener
     useEffect(() => {
         const handleGlobalClick = (e: MouseEvent) => {
-            // Don't drop fish if clicking on a button or link
+            // 1. Restrict to bottom area (e.g., bottom 35% of screen) where penguins walk
+            // This prevents fish from falling when working on forms in the top/middle
+            const safeZoneHeight = window.innerHeight * 0.35;
+            if (e.clientY < window.innerHeight - safeZoneHeight) return;
+
+            // 2. Strict check for interactive elements
+            // Don't drop fish if clicking on a button, link, input, label, textarea, or inside a form
             const target = e.target as HTMLElement;
-            if (target.closest('button') || target.closest('a') || target.closest('.no-fish-drop')) return;
+            if (
+                target.closest('button') ||
+                target.closest('a') ||
+                target.closest('input') ||
+                target.closest('label') ||
+                target.closest('textarea') ||
+                target.closest('select') ||
+                target.closest('form') ||
+                target.closest('.no-fish-drop')
+            ) return;
 
             const styleIndex = Math.floor(Math.random() * fishStyles.length);
             const newFish = {
