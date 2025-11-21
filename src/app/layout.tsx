@@ -26,7 +26,9 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${inter.className} min-h-screen pb-16`}>
         <Navbar />
-        {children}
+        <main className="pt-16">
+          {children}
+        </main>
         <WalkingPenguinsOverlay penguins={penguins} />
         <Footer />
       </body>
