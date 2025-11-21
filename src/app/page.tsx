@@ -1,16 +1,22 @@
 import { Hero } from "@/components/home/Hero";
-import { PhotoGallery } from "@/components/home/PhotoGallery";
-import { FeaturedPenguin } from "@/components/home/FeaturedPenguin";
-import { getPenguins } from "@/lib/data";
+import { HomeHighlights } from "@/components/home/HomeHighlights";
+import { GlobalGallery } from "@/components/gallery/GlobalGallery";
+import { getPenguins, getMemories } from "@/lib/data";
 
 export default async function Home() {
   const penguins = await getPenguins();
+  const memories = await getMemories();
+
+  // Select random featured penguin
+  const featuredPenguin = penguins[Math.floor(Math.random() * penguins.length)];
+  // Select memory (first one for now, or logic for today)
+  const featuredMemory = memories[0];
 
   return (
-    <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <main className="flex min-h-screen flex-col items-center justify-between">
       <Hero />
-      <FeaturedPenguin penguins={penguins} />
-      <PhotoGallery penguins={penguins} />
+      <HomeHighlights memory={featuredMemory} penguin={featuredPenguin} />
+      <GlobalGallery penguins={penguins} memories={memories} />
     </main>
   );
 }

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Calendar, MapPin, Weight, Ruler, Tag, Globe, Heart } from "lucide-react";
-import { getPenguinById } from "@/lib/data";
+import { getPenguin } from "@/lib/data";
 import { ImageViewer } from "@/components/catalog/ImageViewer";
 import { FeedingButton } from "@/components/catalog/FeedingButton";
 
@@ -13,7 +13,7 @@ interface PageProps {
 
 export default async function PenguinDetailPage({ params }: PageProps) {
     const { id } = await params;
-    const penguin = await getPenguinById(id);
+    const penguin = await getPenguin(id);
 
     if (!penguin) {
         notFound();

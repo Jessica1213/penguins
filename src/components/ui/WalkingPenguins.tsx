@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Fish } from "lucide-react";
 import { Penguin } from "@/types/penguin";
+import { useSettings } from "@/context/SettingsContext";
 
 interface WalkingPenguin extends Penguin {
     x: number;
@@ -31,7 +32,8 @@ interface WalkingPenguinsProps {
 // Or just put it all in one. 
 // Let's refactor to use window click listener.
 
-export function WalkingPenguinsOverlay({ penguins }: WalkingPenguinsProps) {
+export function WalkingPenguinsOverlay({ penguins }: { penguins: Penguin[] }) {
+    const { isFeedingEnabled } = useSettings();
     const [walkers, setWalkers] = useState<WalkingPenguin[]>([]);
     const [fishes, setFishes] = useState<DroppedFish[]>([]);
 
@@ -93,6 +95,8 @@ export function WalkingPenguinsOverlay({ penguins }: WalkingPenguinsProps) {
 
     // Global Click Listener
     useEffect(() => {
+        if (!isFeedingEnabled) return;
+
         const handleGlobalClick = (e: MouseEvent) => {
             // 1. Restrict to bottom area (e.g., bottom 35% of screen) where penguins walk
             // This prevents fish from falling when working on forms in the top/middle
@@ -155,6 +159,8 @@ export function WalkingPenguinsOverlay({ penguins }: WalkingPenguinsProps) {
         window.addEventListener('click', handleGlobalClick);
         return () => window.removeEventListener('click', handleGlobalClick);
     }, []);
+
+    if (!isFeedingEnabled) return null;
 
     return (
         <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">

@@ -8,12 +8,14 @@ import { cn } from "@/lib/utils";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Penguin Database",
-  description: "A beautiful collection of penguin dolls",
+  title: "Jessica's Penguins",
+  description: "A personal collection of adorable penguin dolls",
 };
 
 import { WalkingPenguinsOverlay } from "@/components/ui/WalkingPenguins";
 import { getPenguins } from "@/lib/data";
+
+import { SettingsProvider } from "@/context/SettingsContext";
 
 export default async function RootLayout({
   children,
@@ -25,12 +27,14 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} min-h-screen pb-16`}>
-        <Navbar />
-        <main className="pt-16">
-          {children}
-        </main>
-        <WalkingPenguinsOverlay penguins={penguins} />
-        <Footer />
+        <SettingsProvider>
+          <Navbar />
+          <main className="pt-16">
+            {children}
+          </main>
+          <WalkingPenguinsOverlay penguins={penguins} />
+          <Footer />
+        </SettingsProvider>
       </body>
     </html>
   );

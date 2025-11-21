@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { PenguinForm } from "@/components/admin/PenguinForm";
-import { getPenguinById } from "@/lib/data";
+import { getPenguin } from "@/lib/data";
 
 interface PageProps {
     params: Promise<{
@@ -12,7 +12,7 @@ interface PageProps {
 
 export default async function EditPenguinPage({ params }: PageProps) {
     const { id } = await params;
-    const penguin = await getPenguinById(id);
+    const penguin = await getPenguin(id);
 
     if (!penguin) {
         notFound();
