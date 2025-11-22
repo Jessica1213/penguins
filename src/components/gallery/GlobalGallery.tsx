@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, MapPin, Tag, Calendar } from "lucide-react";
+import { X, Tag, Calendar } from "lucide-react";
 import { Penguin } from "@/types/penguin";
 import { Memory } from "@/types/memory";
 
@@ -27,28 +28,34 @@ export function GlobalGallery({ penguins, memories }: GlobalGalleryProps) {
     const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
 
     // Combine and shuffle items
-    const items: GalleryItem[] = [
-        ...penguins.flatMap(p => p.images.map((img, idx) => ({
-            id: `p-${p.id}-${idx}`,
-            type: "penguin" as const,
-            imageUrl: img,
-            title: p.name,
-            subtitle: p.nickname,
-            description: p.note,
-            tags: [p.tag || "Penguin", p.country || "Unknown"],
-        }))),
-        ...memories.map(m => ({
-            id: `m-${m.id}`,
-            type: "memory" as const,
-            imageUrl: m.imageUrl,
-            title: m.title,
-            subtitle: m.location,
-            description: m.description,
-            date: m.date,
-            tags: ["Memory"],
-            penguinIds: m.penguinIds,
-        }))
-    ].sort(() => Math.random() - 0.5);
+    const [shuffledItems, setShuffledItems] = useState<GalleryItem[]>([]);
+
+    useEffect(() => {
+        const items: GalleryItem[] = [
+            ...penguins.flatMap(p => p.images.map((img, idx) => ({
+                id: `p-${p.id}-${idx}`,
+                type: "penguin" as const,
+                imageUrl: img,
+                title: p.name,
+                subtitle: p.nickname,
+                description: p.note,
+                tags: [p.tag || "Penguin", p.country || "Unknown"],
+            }))),
+            ...memories.map(m => ({
+                id: `m-${m.id}`,
+                type: "memory" as const,
+                imageUrl: m.imageUrl,
+                title: m.title,
+                subtitle: m.location,
+                description: m.description,
+                date: m.date,
+                tags: ["Memory"],
+                penguinIds: m.penguinIds,
+            }))
+        ];
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setShuffledItems(items.sort(() => Math.random() - 0.5));
+    }, [penguins, memories]);
 
     // Helper to get penguin details
     const getPenguinDetails = (id: string) => penguins.find(p => p.id === id);
@@ -66,7 +73,7 @@ export function GlobalGallery({ penguins, memories }: GlobalGalleryProps) {
                 </div>
 
                 <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-                    {items.map((item) => (
+                    {shuffledItems.map((item) => (
                         <motion.div
                             key={item.id}
                             layoutId={item.id}
@@ -74,11 +81,15 @@ export function GlobalGallery({ penguins, memories }: GlobalGalleryProps) {
                             className="break-inside-avoid cursor-pointer group relative rounded-xl overflow-hidden"
                             whileHover={{ scale: 1.02 }}
                         >
-                            <img
-                                src={item.imageUrl}
-                                alt={item.title}
-                                className="w-full h-auto object-cover"
-                            />
+                            <div className="relative w-full">
+                                <Image
+                                    src={item.imageUrl}
+                                    alt={item.title}
+                                    width={400}
+                                    height={300}
+                                    className="w-full h-auto object-cover"
+                                />
+                            </div>
                             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
                         </motion.div>
                     ))}
@@ -93,11 +104,12 @@ export function GlobalGallery({ penguins, memories }: GlobalGalleryProps) {
                             className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden max-w-4xl w-full max-h-[90vh] flex flex-col md:flex-row shadow-2xl"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <div className="md:w-2/3 bg-black flex items-center justify-center">
-                                <img
+                            <div className="md:w-2/3 bg-black flex items-center justify-center relative">
+                                <Image
                                     src={selectedItem.imageUrl}
                                     alt={selectedItem.title}
-                                    className="max-w-full max-h-[60vh] md:max-h-full object-contain"
+                                    fill
+                                    className="object-contain"
                                 />
                             </div>
                             <div className="md:w-1/3 p-6 md:p-8 overflow-y-auto">
@@ -140,10 +152,12 @@ export function GlobalGallery({ penguins, memories }: GlobalGalleryProps) {
                                                     if (!penguin) return null;
                                                     return (
                                                         <div key={id} className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 pr-3 rounded-full border border-slate-100 dark:border-slate-700">
-                                                            <img
+                                                            <Image
                                                                 src={penguin.images[0]}
                                                                 alt={penguin.name}
-                                                                className="w-8 h-8 rounded-full object-cover"
+                                                                width={32}
+                                                                height={32}
+                                                                className="rounded-full object-cover"
                                                             />
                                                             <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                                                 {penguin.nickname || penguin.name}

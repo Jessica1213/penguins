@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Penguin } from "@/types/penguin";
 
+import Image from "next/image";
+
 interface FeaturedPenguinProps {
     penguins: Penguin[];
 }
@@ -17,6 +19,7 @@ export function FeaturedPenguin({ penguins }: FeaturedPenguinProps) {
         if (penguins.length > 0) {
             // Simple random selection on mount
             const randomIndex = Math.floor(Math.random() * penguins.length);
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setFeatured(penguins[randomIndex]);
         }
     }, [penguins]);
@@ -36,10 +39,12 @@ export function FeaturedPenguin({ penguins }: FeaturedPenguinProps) {
                         className="w-full md:w-1/2 relative"
                     >
                         <div className="relative aspect-square max-w-md mx-auto rounded-full overflow-hidden border-8 border-white dark:border-slate-800 shadow-2xl">
-                            <img
+                            <Image
                                 src={featured.images[0]}
                                 alt={featured.name}
-                                className="w-full h-full object-cover animate-waddle"
+                                fill
+                                className="object-cover animate-waddle"
+                                sizes="(max-width: 768px) 100vw, 50vw"
                             />
                         </div>
                         {/* Decorative Elements */}

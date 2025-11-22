@@ -3,7 +3,7 @@
 import { Memory } from "@/types/memory";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface OnThisDayProps {
     memories: Memory[];
@@ -35,10 +35,11 @@ export function OnThisDay({ memories }: OnThisDayProps) {
 
                 <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-8 items-center">
                     <div className="w-full md:w-1/3 aspect-video md:aspect-square rounded-xl overflow-hidden relative group">
-                        <img
+                        <Image
                             src={memory.imageUrl}
                             alt={memory.title}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                     </div>
 

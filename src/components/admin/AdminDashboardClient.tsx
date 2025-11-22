@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 import { Plus, Edit, Trash2, Search, LogOut, BookHeart, Calendar, MapPin } from "lucide-react";
 import { Penguin } from "@/types/penguin";
 import { Memory } from "@/types/memory";
@@ -35,6 +36,7 @@ export function AdminDashboardClient({ initialPenguins, initialMemories }: Admin
         // Set active tab from query param
         const tab = searchParams.get("tab");
         if (tab === "memories") {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setActiveTab("memories");
         }
     }, [router, searchParams]);
@@ -156,10 +158,12 @@ export function AdminDashboardClient({ initialPenguins, initialMemories }: Admin
                                         <tr key={penguin.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <img
+                                                    <Image
                                                         src={penguin.images[0]}
                                                         alt={penguin.name}
-                                                        className="w-10 h-10 rounded-full object-cover"
+                                                        width={40}
+                                                        height={40}
+                                                        className="rounded-full object-cover"
                                                     />
                                                     <div>
                                                         <div className="font-medium text-slate-900 dark:text-white">{penguin.name}</div>
@@ -210,10 +214,12 @@ export function AdminDashboardClient({ initialPenguins, initialMemories }: Admin
                                         <tr key={memory.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer" onClick={() => setSelectedMemory(memory)}>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <img
+                                                    <Image
                                                         src={memory.imageUrl}
                                                         alt={memory.title}
-                                                        className="w-12 h-12 rounded-lg object-cover"
+                                                        width={48}
+                                                        height={48}
+                                                        className="rounded-lg object-cover"
                                                     />
                                                     <div>
                                                         <div className="font-medium text-slate-900 dark:text-white">{memory.title}</div>

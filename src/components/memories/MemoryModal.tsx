@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Tag } from "lucide-react";
+import Image from "next/image";
 import { Memory } from "@/types/memory";
 import { Penguin } from "@/types/penguin";
 
@@ -26,11 +27,12 @@ export function MemoryModal({ memory, penguins, onClose }: MemoryModalProps) {
                         className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden max-w-4xl w-full max-h-[90vh] flex flex-col md:flex-row shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="md:w-2/3 bg-black flex items-center justify-center">
-                            <img
+                        <div className="md:w-2/3 bg-black flex items-center justify-center relative">
+                            <Image
                                 src={memory.imageUrl}
                                 alt={memory.title}
-                                className="max-w-full max-h-[60vh] md:max-h-full object-contain"
+                                fill
+                                className="object-contain"
                             />
                         </div>
                         <div className="md:w-1/3 p-6 md:p-8 overflow-y-auto">
@@ -69,10 +71,12 @@ export function MemoryModal({ memory, penguins, onClose }: MemoryModalProps) {
                                                 if (!penguin) return null;
                                                 return (
                                                     <div key={id} className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 pr-3 rounded-full border border-slate-100 dark:border-slate-700">
-                                                        <img
+                                                        <Image
                                                             src={penguin.images[0]}
                                                             alt={penguin.name}
-                                                            className="w-8 h-8 rounded-full object-cover"
+                                                            width={32}
+                                                            height={32}
+                                                            className="rounded-full object-cover"
                                                         />
                                                         <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                                             {penguin.nickname || penguin.name}

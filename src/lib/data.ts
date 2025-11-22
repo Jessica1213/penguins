@@ -10,6 +10,7 @@ const pool = new Pool({
 });
 
 // Helper to transform DB rows to application types
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapPenguin(row: any): Penguin {
     return {
         id: row.id,
@@ -29,6 +30,7 @@ function mapPenguin(row: any): Penguin {
     };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapMemory(row: any): Memory {
     return {
         id: row.id,
@@ -85,6 +87,7 @@ export async function updatePenguin(id: string, penguin: Partial<Penguin>): Prom
     try {
         // Build dynamic update query
         const fields: string[] = [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const values: any[] = [];
         let paramIndex = 1;
 
@@ -177,6 +180,7 @@ export async function updateMemory(id: string, memory: Partial<Memory>): Promise
     const client = await pool.connect();
     try {
         const fields: string[] = [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const values: any[] = [];
         let paramIndex = 1;
 

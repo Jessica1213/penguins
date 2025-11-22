@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Calendar, MapPin, Weight, Ruler, Tag, Globe, Heart } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, Weight, Ruler, Tag, Globe } from "lucide-react";
 import { getPenguin } from "@/lib/data";
 import { ImageViewer } from "@/components/catalog/ImageViewer";
 import { FeedingButton } from "@/components/catalog/FeedingButton";
@@ -53,7 +53,7 @@ export default async function PenguinDetailPage({ params }: PageProps) {
                             </div>
                             {penguin.nickname && (
                                 <p className="text-xl text-slate-500 dark:text-slate-400 italic">
-                                    "{penguin.nickname}"
+                                    &quot;{penguin.nickname}&quot;
                                 </p>
                             )}
                         </div>
@@ -63,7 +63,7 @@ export default async function PenguinDetailPage({ params }: PageProps) {
                             <div className="prose dark:prose-invert max-w-none mb-8">
                                 <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">About {penguin.name}</h2>
                                 <p className="text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">
-                                    {penguin.note || "No additional notes available for this penguin."}
+                                    {penguin.note ? `"${penguin.note}"` : "No additional notes available for this penguin."}
                                 </p>
                             </div>
 

@@ -16,6 +16,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         const stored = localStorage.getItem("penguin-feeding-enabled");
         if (stored !== null) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setIsFeedingEnabled(stored === "true");
         }
     }, []);

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Anchor, Settings, Fish, Bird } from "lucide-react";
+import { Menu, X, Settings, Fish, Bird } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSettings } from "@/context/SettingsContext";
 import { ModeToggle } from "@/components/theme/mode-toggle";
@@ -28,7 +28,7 @@ export function Navbar() {
                             <div className="bg-ocean-600 text-white p-2 rounded-lg">
                                 <Bird className="h-6 w-6" />
                             </div>
-                            <span className="text-xl font-bold text-slate-900 dark:text-white">Jessica's Penguins</span>
+                            <span className="text-xl font-bold text-slate-900 dark:text-white">Jessica&apos;s Penguins</span>
                         </Link>
                     </div>
 

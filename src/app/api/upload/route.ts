@@ -8,7 +8,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         const jsonResponse = await handleUpload({
             body,
             request,
-            onBeforeGenerateToken: async (pathname) => {
+            onBeforeGenerateToken: async (/* pathname */) => {
                 // Generate a client token for the browser to upload the file
                 // ⚠️ Authenticate and authorize users here, not in the browser
                 return {
@@ -18,7 +18,7 @@ export async function POST(request: Request): Promise<NextResponse> {
                     }),
                 };
             },
-            onUploadCompleted: async ({ blob, tokenPayload }) => {
+            onUploadCompleted: async ({ blob }) => {
                 // Get notified of client upload completion
                 console.log('blob uploaded', blob.url);
             },

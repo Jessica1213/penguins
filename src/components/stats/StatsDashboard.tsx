@@ -4,6 +4,7 @@ import { Penguin } from "@/types/penguin";
 import { Crown, Users, Scale, Ruler, Cake, PieChart, Award } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 interface StatMetric {
     label: string;
@@ -84,7 +85,7 @@ export function StatsDashboard({
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {facts.oldest && (
                         <Link href={`/penguins/${facts.oldest.id}`} className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center gap-4 hover:shadow-md transition-shadow">
-                            <img src={facts.oldest.images[0]} alt={facts.oldest.name} className="w-12 h-12 rounded-full object-cover" />
+                            <Image src={facts.oldest.images[0]} alt={facts.oldest.name} width={48} height={48} className="rounded-full object-cover" />
                             <div>
                                 <div className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Oldest</div>
                                 <div className="font-bold text-slate-900 dark:text-white">{facts.oldest.name}</div>
@@ -94,7 +95,7 @@ export function StatsDashboard({
                     )}
                     {facts.youngest && (
                         <Link href={`/penguins/${facts.youngest.id}`} className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center gap-4 hover:shadow-md transition-shadow">
-                            <img src={facts.youngest.images[0]} alt={facts.youngest.name} className="w-12 h-12 rounded-full object-cover" />
+                            <Image src={facts.youngest.images[0]} alt={facts.youngest.name} width={48} height={48} className="rounded-full object-cover" />
                             <div>
                                 <div className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Youngest</div>
                                 <div className="font-bold text-slate-900 dark:text-white">{facts.youngest.name}</div>
@@ -104,7 +105,7 @@ export function StatsDashboard({
                     )}
                     {facts.tallest && (
                         <Link href={`/penguins/${facts.tallest.id}`} className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center gap-4 hover:shadow-md transition-shadow">
-                            <img src={facts.tallest.images[0]} alt={facts.tallest.name} className="w-12 h-12 rounded-full object-cover" />
+                            <Image src={facts.tallest.images[0]} alt={facts.tallest.name} width={48} height={48} className="rounded-full object-cover" />
                             <div>
                                 <div className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Tallest</div>
                                 <div className="font-bold text-slate-900 dark:text-white">{facts.tallest.name}</div>
@@ -114,7 +115,7 @@ export function StatsDashboard({
                     )}
                     {facts.heaviest && (
                         <Link href={`/penguins/${facts.heaviest.id}`} className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center gap-4 hover:shadow-md transition-shadow">
-                            <img src={facts.heaviest.images[0]} alt={facts.heaviest.name} className="w-12 h-12 rounded-full object-cover" />
+                            <Image src={facts.heaviest.images[0]} alt={facts.heaviest.name} width={48} height={48} className="rounded-full object-cover" />
                             <div>
                                 <div className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Heaviest</div>
                                 <div className="font-bold text-slate-900 dark:text-white">{facts.heaviest.name}</div>

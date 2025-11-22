@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ArrowUpDown } from "lucide-react";
+import { Search } from "lucide-react";
 import { Penguin, PenguinSortOption } from "@/types/penguin";
 import { PenguinCard } from "./PenguinCard";
 

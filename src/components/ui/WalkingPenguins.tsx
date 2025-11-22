@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Fish } from "lucide-react";
 import { Penguin } from "@/types/penguin";
@@ -22,9 +23,7 @@ interface DroppedFish {
     style: { color: string; scale: number };
 }
 
-interface WalkingPenguinsProps {
-    penguins: Penguin[];
-}
+
 
 
 
@@ -57,6 +56,7 @@ export function WalkingPenguinsOverlay({ penguins }: { penguins: Penguin[] }) {
                 state: "walking",
             });
         }
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setWalkers(initialWalkers);
     }, [penguins]);
 
@@ -84,18 +84,18 @@ export function WalkingPenguinsOverlay({ penguins }: { penguins: Penguin[] }) {
     }, []);
 
     // Fish Styles
-    const fishStyles = [
-        { color: "text-orange-500", scale: 1 },
-        { color: "text-blue-500", scale: 0.9 },
-        { color: "text-red-500", scale: 1.1 },
-        { color: "text-yellow-500", scale: 0.8 },
-        { color: "text-emerald-500", scale: 1 },
-        { color: "text-purple-500", scale: 1.2 },
-    ];
-
     // Global Click Listener
     useEffect(() => {
         if (!isFeedingEnabled) return;
+
+        const fishStyles = [
+            { color: "text-orange-500", scale: 1 },
+            { color: "text-blue-500", scale: 0.9 },
+            { color: "text-red-500", scale: 1.1 },
+            { color: "text-yellow-500", scale: 0.8 },
+            { color: "text-emerald-500", scale: 1 },
+            { color: "text-purple-500", scale: 1.2 },
+        ];
 
         const handleGlobalClick = (e: MouseEvent) => {
             // 1. Restrict to bottom area (e.g., bottom 35% of screen) where penguins walk
@@ -158,7 +158,7 @@ export function WalkingPenguinsOverlay({ penguins }: { penguins: Penguin[] }) {
 
         window.addEventListener('click', handleGlobalClick);
         return () => window.removeEventListener('click', handleGlobalClick);
-    }, []);
+    }, [isFeedingEnabled]);
 
     if (!isFeedingEnabled) return null;
 
@@ -205,11 +205,12 @@ export function WalkingPenguinsOverlay({ penguins }: { penguins: Penguin[] }) {
                             </AnimatePresence>
 
                             {/* Penguin Image */}
-                            <img
+                            <Image
                                 src={p.images[0]}
                                 alt={p.name}
+                                fill
                                 className={
-                                    "w-full h-full object-contain drop-shadow-lg transition-transform " +
+                                    "object-contain drop-shadow-lg transition-transform " +
                                     (p.direction === "left" ? "scale-x-[-1]" : "") + " " +
                                     (p.state === "walking" ? "animate-waddle" : "")
                                 }

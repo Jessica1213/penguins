@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Upload, MapPin, Calendar, Tag, Loader2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Penguin } from "@/types/penguin";
 import { createMemoryAction } from "@/app/actions";
 import { upload } from "@vercel/blob/client";
@@ -95,7 +96,7 @@ export function PublicNewMemoryClient({ penguins }: PublicNewMemoryClientProps) 
                         </label>
                         <div className="relative aspect-video rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-ocean-500 dark:hover:border-ocean-500 transition-colors bg-slate-50 dark:bg-slate-800/50 overflow-hidden group">
                             {imagePreview ? (
-                                <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                                <Image src={imagePreview} alt="Preview" fill className="object-cover" />
                             ) : (
                                 <div className="flex flex-col items-center justify-center h-full">
                                     {isUploading ? (

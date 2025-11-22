@@ -18,6 +18,7 @@ export function FeedingButton({ penguinId, penguinName }: FeedingButtonProps) {
     useEffect(() => {
         const savedCount = localStorage.getItem(`penguin_feed_${penguinId}`);
         if (savedCount) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setFishCount(parseInt(savedCount, 10));
         }
     }, [penguinId]);

@@ -6,6 +6,8 @@ import { Calendar, Star, MapPin, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
+import Image from "next/image";
+
 interface HomeHighlightsProps {
     memory: Memory | undefined;
     penguin: Penguin | undefined;
@@ -46,10 +48,12 @@ export function HomeHighlights({ memory, penguin }: HomeHighlightsProps) {
                             </div>
 
                             <div className="relative aspect-video w-full overflow-hidden group">
-                                <img
+                                <Image
                                     src={memory.imageUrl}
                                     alt={memory.title}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                    sizes="(max-width: 768px) 100vw, 50vw"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
                                     <p className="text-white font-medium flex items-center gap-2">
@@ -97,10 +101,12 @@ export function HomeHighlights({ memory, penguin }: HomeHighlightsProps) {
                             </div>
 
                             <div className="relative aspect-video w-full overflow-hidden group">
-                                <img
+                                <Image
                                     src={penguin.images[0]}
                                     alt={penguin.name}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                    sizes="(max-width: 768px) 100vw, 50vw"
                                 />
                             </div>
 
@@ -114,7 +120,7 @@ export function HomeHighlights({ memory, penguin }: HomeHighlightsProps) {
                                     </span>
                                 </div>
                                 <p className="text-slate-600 dark:text-slate-300 mb-6 flex-1 italic">
-                                    "{penguin.note}"
+                                    &quot;{penguin.note}&quot;
                                 </p>
                                 <Link
                                     href={`/penguins/${penguin.id}`}

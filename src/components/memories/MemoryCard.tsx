@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Memory } from "@/types/memory";
 import { MapPin, Calendar, Tag } from "lucide-react";
 import { motion } from "framer-motion";
@@ -20,10 +21,11 @@ export function MemoryCard({ memory, onClick }: MemoryCardProps) {
         >
             {/* Image Header */}
             <div className="relative aspect-square sm:aspect-video w-full overflow-hidden">
-                <img
+                <Image
                     src={memory.imageUrl}
                     alt={memory.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    fill
+                    className="object-cover hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
                     <h3 className="text-white font-bold text-lg">{memory.title}</h3>

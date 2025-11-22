@@ -25,6 +25,7 @@ export function PhotoGallery({ penguins }: PhotoGalleryProps) {
     useEffect(() => {
         const interval = setInterval(changeImage, 4000); // Change every 4 seconds
         return () => clearInterval(interval);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentIndex, allImages.length]); // Re-create interval when index changes to reset timer
 
     if (allImages.length === 0) return null;

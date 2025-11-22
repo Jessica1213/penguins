@@ -182,7 +182,7 @@ export async function GET() {
         return NextResponse.json({ message: "Database seeded successfully" }, { status: 200 });
     } catch (error) {
         console.error("Seed Error Details:", error);
-        // @ts-ignore
+        // @ts-expect-error - error is unknown
         return NextResponse.json({ error: error.message, details: error }, { status: 500 });
     }
 }

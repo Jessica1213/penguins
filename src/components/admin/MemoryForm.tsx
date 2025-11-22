@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import Image from "next/image";
 import { Upload, MapPin, Calendar, Tag, Search, Loader2 } from "lucide-react";
 import { upload } from "@vercel/blob/client";
 import { Penguin } from "@/types/penguin";
@@ -83,7 +83,7 @@ export function MemoryForm({ initialData, onSubmit, isSubmitting, penguins }: Me
                 </label>
                 <div className="relative aspect-video rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-ocean-500 dark:hover:border-ocean-500 transition-colors bg-slate-50 dark:bg-slate-800/50 overflow-hidden group">
                     {imagePreview ? (
-                        <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                        <Image src={imagePreview} alt="Preview" fill className="object-cover" />
                     ) : (
                         <div className="flex flex-col items-center justify-center h-full">
                             {isUploading ? (
@@ -204,10 +204,12 @@ export function MemoryForm({ initialData, onSubmit, isSubmitting, penguins }: Me
                                     checked={formData.penguinIds.includes(penguin.id)}
                                     onChange={() => togglePenguin(penguin.id)}
                                 />
-                                <img
+                                <Image
                                     src={penguin.images[0]}
                                     alt={penguin.name}
-                                    className="w-5 h-5 rounded-full object-cover"
+                                    width={20}
+                                    height={20}
+                                    className="rounded-full object-cover"
                                 />
                                 <span className="text-sm">{penguin.nickname || penguin.name}</span>
                             </label>

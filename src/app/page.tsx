@@ -8,6 +8,7 @@ export default async function Home() {
   const memories = await getMemories();
 
   // Select random featured penguin
+  // eslint-disable-next-line react-hooks/purity
   const featuredPenguin = penguins[Math.floor(Math.random() * penguins.length)];
   // Select memory (first one for now, or logic for today)
   const featuredMemory = memories[0];

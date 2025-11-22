@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Upload, X, Loader2 } from "lucide-react";
+import Image from "next/image";
+import { Upload, X, Loader2 } from "lucide-react";
 import { upload } from "@vercel/blob/client";
 import Link from "next/link";
 import { Penguin } from "@/types/penguin";
@@ -219,7 +220,7 @@ export function PenguinForm({ initialData }: PenguinFormProps) {
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
                     {images.map((img, idx) => (
                         <div key={idx} className="relative aspect-square rounded-lg overflow-hidden group">
-                            <img src={img} alt={`Upload ${idx}`} className="w-full h-full object-cover" />
+                            <Image src={img} alt={`Upload ${idx}`} fill className="object-cover" />
                             <button
                                 type="button"
                                 onClick={() => removeImage(idx)}
